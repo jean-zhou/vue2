@@ -1,0 +1,138 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id='app'>
+    </div>
+    <script type="text/javascript" src='./node_modules/vue/dist/vue.js'> </script>
+    <script type="text/javascript">
+        // 父 ===> 子
+        // 1.先在父组件中，给子组件绑定父组件的自定义属性【数据属性】（需要传给子组件的属性）
+        // 2.在子组件中使用props 接收父组件传的数据
+        // 3.然后可以在子组件中任意使用
+        // Vue.component('Child', {
+        //         template: `
+        //         <div>
+        //             <p>我是孩子组件</p>
+        //             <p>{{childData}}</p>
+        //             <input type='text' v-model='childData' />
+        //         </div>
+        //         `,
+        //         props:['childData']
+        //     })
+        // Vue.component('Parent', {
+        //     data(){
+        //         return {
+        //             msg:'我是父组件的数据',
+        //         }
+        //     },
+        //     template: `
+        //     <div>
+        //         <p>我是父组件</p>
+        //         <P>孩子组件挂载在父组件上,同时把子组件需要的父组件的数据，绑定在子组件中</p>
+        //         <Child :childData = 'msg'/>
+        //     </div>
+        // `
+        // });
+        // var App = {
+        //     template:
+        //         `
+        //         <div>
+        //             <Parent/>
+        //         </div>
+        //         `
+            
+        // };
+        // var vm = new Vue({
+        //     el: '#app',
+        //     data() {
+        //         return {
+
+        //         }
+        //     },
+        //     components: {
+        //         App
+        //     },
+        //     template: `
+        //         <App/>
+        //     `
+        //     })
+        // 子 ===> 父
+        // 1.先在父组件中的子组件，绑定自定义的属性【父组件中获取子组件数据的属性】
+        // 2.在子组件中触发原生的事件，在事件的函数中使用$emit触发自定义的事件
+        // Vue.component('Child', {
+        //         template: `
+        //         <div>
+        //             <p>我是孩子组件</p>
+        //             <p>{{childData}}</p>
+        //             <input type='text' v-model='childData' @input='changeValue(childData)' />
+        //         </div>
+        //         `,
+        //         props:['childData'],
+        //         methods:{
+        //             changeValue(vel){
+        //                 // $emit 有两个参数（在父组件中的子组件的自定义事件名，需要发出的数据）
+        //                 this.$emit(childHander,val)
+        //             }
+        //         }
+        //     })
+        // Vue.component('Parent', {
+        //     data(){
+        //         return {
+        //             msg:'我是父组件的数据',
+        //         }
+        //     },
+        //     template: `
+        //     <div>
+        //         <p>我是父组件</p>
+        //         <Child :childData = 'msg' @childHander= 'childHander'/>
+        //     </div>
+        // `,
+        //     methods:{
+        //         childHander(vel){
+        //             console.log(vel)
+        //         }
+        //     }
+        // });
+        // var App = {
+        //     template:
+        //         `
+        //         <div>
+        //             <Parent/>
+        //         </div>
+        //         `
+
+        // };
+        // var vm = new Vue({
+        //     el: '#app',
+        //     data() {
+        //         return {
+
+        //         }
+        //     },
+        //     components: {
+        //         App
+        //     },
+        //     template: `
+        //         <App/>
+        //     `
+        //     })
+        /*组件之间传值，有5种方式
+        1.props 和 $emit (父子之间传值)
+        2.$attrs 和 $listeners (父子之前可以隔几层的传值)
+        3.中央中线 bus 可以兄弟组件之间传值，使用时需要单独建立一个 bus组件
+`       4.provide（传） 和 inject（接收）
+        5.Vuex 中央空调
+        processon 可以画流程图
+*/
+        </script>
+    </body>
+</html>

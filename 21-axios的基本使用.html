@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>meta</title>
+</head>
+
+<body>
+    <div id="app">
+
+    </div>
+    <script type="text/javascript" src='./node_modules/vue/dist/vue.js'> </script>
+    <script type="text/javascript" src='./node_modules/axios/dist/axios.js'> </script>
+    <script>
+        var App = {
+            template:`
+                <div>
+                    <button @click='sendAjax'>发请求</button>
+                </div>
+            `,
+            // 为给定 ID 的 user 创建请求 【官方文档】
+            // axios.get('/user?ID=12345')
+            //     .then(function (response) {
+            //         console.log(response);
+            //     })
+            //     .catch(function (error) {
+            //         console.log(error);
+            //     });
+            methods:{
+                sendAjax(){
+                    this.$axios.get('')
+                    .then(res=>{
+                        console.log(res)
+                    })
+                    .catch(err=>{
+                        console.log(err)
+                    })
+                }
+            }
+        }
+
+        
+        Vue.prototype.$axios = axios;
+        var vm = new Vue({
+            el: "#app",
+            components:{
+                App
+            },
+            template:`
+                <App/>
+            `
+        })
+    </script>
+</body>
+
+</html>

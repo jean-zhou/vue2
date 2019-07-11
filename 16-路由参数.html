@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>参数</title>
+</head>
+
+<body>
+    <div id="app">
+
+    </div>
+    <script type="text/javascript" src='./node_modules/vue/dist/vue.js'> </script>
+    <script type="text/javascript" src='./node_modules/vue-router/dist/vue-router.js'> </script>
+    <script>
+    
+        var UserParams = {
+            
+            template: `
+                <div>我是用户1</div>
+            `,
+            created(){
+                // 如何获取组件的id值
+                // 在创建vue-router的时候，就会抛出来两个对象挂载在vue实例化的对象中
+                console.log(this.$router);
+                // 这样可以获取到该组件的id
+                console.log(this.$route.params.id);
+            }
+        }
+        var UserQuery = {
+            template: `
+                <div>我是用户2</div>
+            `
+        }
+        var router = new VueRouter({
+            routes: [
+                // 路由匹配的规则
+                {
+                    // 动态路由参数，以冒号开头，params
+                    path: '/user/:id',
+                    name: 'userP',
+                    component: UserParams
+                },
+                {
+                    // 查询路由方式
+                    path: '/user',
+                    name: 'userQ',
+                    component: UserQuery
+                }
+            ]
+        })
+        // 路由参数有两者
+        // 1.xxx.html#/user1/1 这种是params动态参数的方式
+        // 2.ooo.html#/user?userId=1 查询 query模式
+        var App = {
+            data() {
+                return {
+
+                }
+            },
+            // 单页面应用是根据内容不同，去修改地址栏链接的名称，实际是假的链接
+            // 所以路由绑定，是根据页面的内容去修改链接的名称
+            template: `
+                <div>
+                <router-link :to="{name: 'userP',params:{id:10}}">用户1</router-link>
+                <router-link :to="{name: 'userQ',query:{userId:2}}">用户2</router-link>
+                <router-view></router-view>
+                </div>
+            `,
+        };
+
+        var vm = new Vue({
+            el: '#app',
+            components: {
+                App
+            },
+            router,
+            template: `
+                    <App/>
+                `
+        });
+    </script>
+</body>
+
+</html>

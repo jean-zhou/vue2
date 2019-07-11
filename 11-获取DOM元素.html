@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="app">
+
+    </div>
+    <script type="text/javascript" src='./node_modules/vue/dist/vue.js'> </script>
+    <script>
+        Vue.component('subCom', {
+            template:`
+                <div class='subCom'>hahah
+                </div>
+            `
+        })
+        var App = {
+            template: `
+                <div class='app'>
+                    <button ref='btn'>我是按钮1</button>
+                    <button ref='btn2'>我是按钮2</button>
+                    <subCom ref='abc'/>
+                </div>
+            `,
+            created(){
+                console.log(this.$refs.btn);
+            },
+            beforeMount:function(){
+                console.log(this.$refs.btn);
+            },
+            // 如果标签绑定了ref="xxx"属性，
+            // 就可以使用this.$refs.xxx获取到原生的js DOM对象
+            // ref 属性的值不能重名（重名的话，值就会被覆盖）
+            mounted(){
+                console.log(this.$refs.btn)
+                console.log(this.$refs.btn2)
+
+                // 如果时给组件绑定了ref属性，那么$refs.xxx获取的当前的组件对象
+                console.log(this.$refs.abc)
+            }
+        };
+        
+        var vm = new Vue({
+            el: '#app',
+            components: {
+                App
+            },
+            template: `
+                    <App/>
+                `
+        });
+    </script>
+</body>
+
+</html>

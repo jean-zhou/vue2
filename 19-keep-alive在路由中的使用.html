@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>嵌套</title>
+</head>
+
+<body>
+    <div id="app">
+
+    </div>
+    <script type="text/javascript" src='./node_modules/vue/dist/vue.js'> </script>
+    <script type="text/javascript" src='./node_modules/vue-router/dist/vue-router.js'> </script>
+    <script>
+        var Timeline = {
+            template: `
+                <div >
+                    我是首页
+                </div>
+            `,
+            created(){
+                console.log("首页组件被创建了")
+            },
+            mounted() {
+                console.log("首页组件DOM挂载了")
+            },
+            destroyed() {
+                console.log("首页组件被销毁了")
+            }
+
+        }
+
+        var Pins = {
+            template: `
+                <div>
+                    <h3 @click='changeHandler'>我是沸点</h3>
+                    
+                </div>
+            `,
+            methods:{
+                changeHandler(e){
+                    e.target.style.color="red"
+                }
+            },
+            created() {
+                console.log("沸点组件被创建了")
+            },
+            mounted() {
+                console.log("沸点组件DOM挂载了")
+            },
+            destroyed() {
+                console.log("沸点组件被销毁了")
+            }
+        }
+        var router = new VueRouter({
+            routes: [
+                {
+                    path: '/timeline',
+                    component: Timeline,
+                },
+                {
+                    path: '/pins',
+                    component: Pins
+                }
+            ]
+        })
+
+        var App = {
+            template: `
+                <div>
+                <router-link to='/timeline'>首页</router-link>
+                <router-link to='/pins'>沸点</router-link>
+                <keep-alive>
+                    // 在路由中，使用keep-alive 是在router-view渲染的时候使用
+                    <router-view/>
+                </keep-alive>
+                </div>
+            `
+        }
+        var vm = new Vue({
+            el: "#app",
+            router,
+            components: {
+                App
+            },
+            template: `
+                <App/>
+            `
+        })
+    </script>
+</body>
+
+</html>
