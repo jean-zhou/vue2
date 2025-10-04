@@ -250,6 +250,8 @@
                         set: (newVal) => {
                             console.log(`设置了 key: ${key}, 其新值为 :${newVal}`);
                             val = newVal;
+                            this.observe(newVal);
+
                         },
                     })
                     
