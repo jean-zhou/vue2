@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html >
+    <head>
+        <meta charset="utf-8">
+        <title></title>
+    </head>
+    <body>
+        <div id="app">
+            <!-- vue的模板字符串语法
+            （也可以直接做数据运算，不需要data传值）
+                1.数据
+                2.运算
+                3.布尔值
+                4.字符串操作
+                5.三元运算
+                6.可以直接插入对象
+            -->
+            <h2>{{ msg }}</h2>
+            <h3>{{ 1 + 1}}</h3>
+            <h4>{{ isTrue }}</h4>
+            <h5>{{ str.split('').reverse().join('')}}</h5>
+            <h1>{{ 1>2?'真的':'假的'}}</h1>
+            <h1>{{ 'hahahah' }}</h1>
+            <h1>{{ {name:'jean'} }}</h1>
+
+        </div>
+        <!-- 1.引包 -->
+        <script type="text/javascript" src='./node_modules/vue/dist/vue.js'></script>
+
+        <script type="text/javascript">
+            // 2.创建实例化对象
+            var data = {
+                // 数据 属性
+                // **现在的数据是写死，以后的数据要从数据库获取
+                // 既可以是一个对象，也可以是一个函数，但是如果是函数的话就要返回一个对象
+                msg:'黄瓜',
+                isTrue:1==1,
+                str:'hello vue'
+            };
+            //script里面的两个对象之间不能打符号，因为 js语言的每个语句结束，要求写分号；
+
+            var vm = new Vue({
+                el:'#app',
+                data:data,
+                // 实例化对象里面的template对象比标签的里面的对象优先渲染(而不是替换)
+                template:``
+
+            });
+            console.log(vm);
+            console.log(vm.$el);
+            console.log(vm.$data);
+            console.log(vm.$data === data );
+        </script>
+    </body>
+</html>

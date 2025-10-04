@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vue双向数据绑定演示</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            width: 100%;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: #4a6cf7;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            opacity: 0.9;
+            font-size: 16px;
+        }
+        
+        .content {
+            padding: 30px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+        
+        @media (max-width: 768px) {
+            .content {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .demo-section {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+        }
+        
+        .demo-section h2 {
+            color: #4a6cf7;
+            margin-bottom: 15px;
+            font-size: 20px;
+            border-bottom: 2px solid #eaeaea;
+            padding-bottom: 10px;
+        }
+        
+        .input-group {
+            margin-bottom: 15px;
+        }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #555;
+        }
+        
+        .input-group input, .input-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+            transition: border 0.3s;
+        }
+        
+        .input-group input:focus, .input-group textarea:focus {
+            border-color: #4a6cf7;
+            outline: none;
+        }
+        
+        .display-area {
+            background: white;
+            border: 1px solid #eaeaea;
+            border-radius: 4px;
+            padding: 15px;
+            min-height: 120px;
+            margin-top: 10px;
+        }
+        
+        .display-area p {
+            margin-bottom: 8px;
+            line-height: 1.5;
+        }
+        
+        .explanation {
+            grid-column: 1 / -1;
+            background: #f0f7ff;
+            border-left: 4px solid #4a6cf7;
+            padding: 20px;
+            border-radius: 4px;
+            margin-top: 10px;
+        }
+        
+        .explanation h3 {
+            color: #4a6cf7;
+            margin-bottom: 10px;
+        }
+        
+        .explanation ul {
+            padding-left: 20px;
+        }
+        
+        .explanation li {
+            margin-bottom: 8px;
+            line-height: 1.5;
+        }
+        
+        .highlight {
+            background: #fff9c4;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-weight: 600;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 15px;
+            background: #f8f9fa;
+            color: #666;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Vue双向数据绑定原理演示</h1>
+            <p>修改输入框内容，观察数据如何自动同步更新</p>
+        </div>
+        
+        <div class="content">
+            <div class="demo-section">
+                <h2>基本数据绑定</h2>
+                <div class="input-group">
+                    <label for="message">消息内容:</label>
+                    <input type="text" id="message" v-model="message" placeholder="输入一些文本...">
+                </div>
+                
+                <div class="input-group">
+                    <label for="counter">计数器:</label>
+                    <input type="number" id="counter" v-model="counter">
+                </div>
+                
+                <div class="display-area">
+                    <p><strong>消息内容:</strong> <span v-text="message"></span></p>
+                    <p><strong>计数器值:</strong> <span v-text="counter"></span></p>
+                    <p><strong>计算属性示例:</strong> 计数器的两倍是 <span v-text="doubleCounter"></span></p>
+                </div>
+            </div>
+            
+            <div class="demo-section">
+                <h2>表单数据绑定</h2>
+                <div class="input-group">
+                    <label for="name">姓名:</label>
+                    <input type="text" id="name" v-model="user.name" placeholder="请输入姓名">
+                </div>
+                
+                <div class="input-group">
+                    <label for="email">邮箱:</label>
+                    <input type="email" id="email" v-model="user.email" placeholder="请输入邮箱">
+                </div>
+                
+                <div class="input-group">
+                    <label>订阅通知:</label>
+                    <div>
+                        <input type="checkbox" id="subscribe" v-model="user.subscribed">
+                        <label for="subscribe" style="display: inline; margin-left: 5px;">我同意接收更新通知</label>
+                    </div>
+                </div>
+                
+                <div class="display-area">
+                    <p><strong>用户信息:</strong></p>
+                    <p>姓名: <span v-text="user.name"></span></p>
+                    <p>邮箱: <span v-text="user.email"></span></p>
+                    <p>订阅状态: <span v-text="user.subscribed ? '已订阅' : '未订阅'"></span></p>
+                </div>
+            </div>
+            
+            <div class="explanation">
+                <h3>双向数据绑定原理</h3>
+                <ul>
+                    <li><span class="highlight">数据劫持</span>: Vue通过重写对象属性的getter/setter来监听数据变化</li>
+                    <li><span class="highlight">依赖收集</span>: 在getter中收集依赖该数据的Watcher</li>
+                    <li><span class="highlight">发布-订阅模式</span>: 数据变化时，setter会通知所有Watcher更新视图</li>
+                    <li><span class="highlight">虚拟DOM差异更新</span>: Vue通过比较虚拟DOM的差异，最小化实际DOM操作</li>
+                    <li>Vue 2.x使用<span class="highlight">Object.defineProperty</span>，Vue 3.x使用更强大的<span class="highlight">Proxy</span></li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>演示Vue双向数据绑定原理 | 修改输入框内容可实时查看数据同步效果</p>
+        </div>
+    </div>
+
+    <script>
+        // 简化版Vue数据绑定实现
+        class SimpleVue {
+            constructor(options) {
+                this.$options = options;
+                this._data = options.data;
+                this._computed = options.computed || {};
+                
+                // 代理数据，使得可以直接通过vm.xxx访问数据
+                this._proxyData();
+                
+                // 初始化计算属性
+                this._initComputed();
+                
+                // 观察数据
+                this.observe(this._data);
+                
+                // 编译模板
+                this.compile(options.el);
+            }
+            
+            // 将data属性代理到Vue实例上
+            _proxyData() {
+                Object.keys(this._data).forEach(key => {
+                    Object.defineProperty(this, key, {
+                        get: () => this._data[key],
+                        set: (newVal) => { this._data[key] = newVal; }
+                    });
+                });
+            }
+            
+            // 初始化计算属性
+            _initComputed() {
+                Object.keys(this._computed).forEach(key => {
+                    Object.defineProperty(this, key, {
+                        get: () => this._computed[key].call(this)
+                    });
+                });
+            }
+            
+            // 观察数据
+            observe(data) {
+                if (!data || typeof data !== 'object') return;
+                
+                Object.keys(data).forEach(key => {
+                    this.defineReactive(data, key, data[key]);
+                });
+            }
+            
+            // 定义响应式数据
+            defineReactive(obj, key, val) {
+                // 递归观察嵌套对象
+                this.observe(val);
+                
+                const dep = new Dep();
+                
+                Object.defineProperty(obj, key, {
+                    enumerable: true,
+                    configurable: true,
+                    get: () => {
+                        if (Dep.target) {
+                            dep.addSub(Dep.target);
+                        }
+                        return val;
+                    },
+                    set: (newVal) => {
+                        if (newVal === val) return;
+                        val = newVal;
+                        // 新值是对象的话，继续观察
+                        this.observe(newVal);
+                        // 通知更新
+                        dep.notify();
+                    }
+                });
+            }
+            
+            // 编译模板
+            compile(el) {
+                const element = document.querySelector(el);
+                this.compileNode(element);
+            }
+            
+            // 编译节点
+            compileNode(node) {
+                node.childNodes.forEach(childNode => {
+                    if (childNode.nodeType === 1) { // 元素节点
+                        this.compileElement(childNode);
+                    } else if (childNode.nodeType === 3) { // 文本节点
+                        this.compileText(childNode);
+                    }
+                    
+                    // 递归编译子节点
+                    if (childNode.childNodes && childNode.childNodes.length) {
+                        this.compileNode(childNode);
+                    }
+                });
+            }
+            
+            // 编译元素节点
+            compileElement(node) {
+                Array.from(node.attributes).forEach(attr => {
+                    if (attr.name.startsWith('v-')) {
+                        const directive = attr.name.substring(2);
+                        const expr = attr.value;
+                        
+                        if (directive === 'model') {
+                            this.vModel(node, expr);
+                        } else if (directive === 'text') {
+                            this.vText(node, expr);
+                        }
+                    }
+                });
+            }
+            
+            // 编译文本节点
+            compileText(node) {
+                const reg = /\{\{(.+?)\}\}/g;
+                const textContent = node.textContent;
+                
+                if (reg.test(textContent)) {
+                    const expr = RegExp.$1.trim();
+                    this.vText(node, expr);
+                }
+            }
+            
+            // v-model指令
+            vModel(node, expr) {
+                node.value = this[expr];
+                
+                new Watcher(this, expr, (newVal) => {
+                    node.value = newVal;
+                });
+                
+                node.addEventListener('input', (e) => {
+                    this[expr] = e.target.value;
+                });
+            }
+            
+            // v-text指令
+            vText(node, expr) {
+                node.textContent = this[expr];
+                
+                new Watcher(this, expr, (newVal) => {
+                    node.textContent = newVal;
+                });
+            }
+        }
+        
+        // 依赖收集器
+        class Dep {
+            constructor() {
+                this.subs = [];
+            }
+            
+            addSub(sub) {
+                this.subs.push(sub);
+            }
+            
+            notify() {
+                this.subs.forEach(sub => sub.update());
+            }
+        }
+        
+        // 观察者
+        class Watcher {
+            constructor(vm, expr, cb) {
+                this.vm = vm;
+                this.expr = expr;
+                this.cb = cb;
+                
+                // 触发getter，收集依赖
+                Dep.target = this;
+                this.value = this.vm[this.expr];
+                Dep.target = null;
+            }
+            
+            update() {
+                const newValue = this.vm[this.expr];
+                if (newValue !== this.value) {
+                    this.value = newValue;
+                    this.cb(newValue);
+                }
+            }
+        }
+        
+        // 初始化Vue实例
+        document.addEventListener('DOMContentLoaded', () => {
+            const app = new SimpleVue({
+                el: '.container',
+                data: {
+                    message: 'Hello Vue!',
+                    counter: 1,
+                    user: {
+                        name: '张三',
+                        email: 'zhangsan@example.com',
+                        subscribed: true
+                    }
+                },
+                computed: {
+                    doubleCounter() {
+                        return this.counter * 2;
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

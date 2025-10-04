@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+    .defult{
+        display: inline-block;
+        line-height: 1;
+        white-space: nowrap;
+        cursor: pointer;
+        background: #fff;
+        border: 1px solid #dcdfe6;
+        color: #606266;
+        -webkit-appearance: none;
+        text-align: center;
+        box-sizing: border-box;
+        outline: none;
+        margin: 0;
+        transition: .1s;
+        font-weight: 500;
+        -moz-user-select: none;
+        -webkit-user-select: none;
+        -ms-user-select: none;
+        padding: 12px 20px;
+        font-size: 14px;
+        border-radius: 4px;
+    }
+        
+    .primary{
+        color: #fff;
+        background-color: #409eff;
+        border-color: #409eff;
+    }
+
+    .success{
+        color: #fff;
+        background-color: #67c23a;
+        border-color: #67c23a;
+    }
+
+    </style>
+</head>
+
+<body>
+    <div id="app">
+
+    </div>
+    <script type="text/javascript" src='./node_modules/vue/dist/vue.js'> </script>
+    <script>
+        // 1---插槽，是内置组件，用来承载分发内容的出口
+        // Vue.component('Vbtn', {
+        //     
+        //     //使用不同的绑定不同的按键效果，可以使用插槽
+        //     template: `
+        //         <button class='defult' :class='type' >
+        //             <slot>
+
+        //             </slot>
+        //         </button>
+        //     `,
+        //     //使用 props，父组件向子组件传值
+        //     props:['type']
+        // })
+
+        // var Vcontent = {
+        //     data() {
+        //         return {
+
+        //         }
+        //     },
+        //     template: `
+        //             <div>
+        //                 我是内容组件
+        //                 <Vbtn type='primary'>登陆</Vbtn>
+        //                 <Vbtn type='success'>姓名</Vbtn>
+        //             </div>
+        //         `
+        // }
+        // var App = {
+        //     data() {
+        //         return {
+
+        //         }
+        //     },
+        //     components: {
+        //         Vheader,
+        //         Vaside,
+        //         Vcontent,
+        //     },
+        //     template: `
+        //     <div>
+        //         <Vheader/>
+        //         <div>
+        //             <Vaside/>
+        //             <Vcontent/>
+        //         </div>
+        //     </div>
+
+        // `,
+        // };
+        // var vm = new Vue({
+        //     el: '#app',
+        //     data() {
+        //         return {
+
+        //         }
+        //     },
+        //     components: {
+        //         App
+        //     },
+        //     template: `
+        //     <App/>
+        // `
+        // })
+
+        // 2----具名插槽
+        Vue.component('myLi',{
+            template:`
+                <li>
+                    第一个
+                    <slot name='two'></slot>
+                    第二个
+                    <slot name='three'></slot>
+                </li>
+            `
+        });
+
+        var App = {
+            template:`
+                <div>
+                    <ul>
+                        <myLi>
+                            <h2 slot='two'> 2</h2>
+                            <h3 slot='three'> 3</h3>
+                        </myLi>
+                    </ul>
+                </div>
+            `
+        };
+
+        var vm = new Vue({
+            el: '#app',
+            components: {
+                App
+            },
+            template: `
+                    <App/>
+                `
+            });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>过滤器</title>
+</head>
+
+<body>
+    <div id="app">
+    </div>
+    <script type="text/javascript" src='./node_modules/vue/dist/vue.js'></script>
+    <script type="text/javascript">
+
+        // 过滤器的作用：为页面的数据进行添油加醋的功能
+        // 局部过滤器 就是当前组件的一个属性 filters
+            // 使用：
+            // 1.声明过滤器 filters
+            // 2.{{ 数据 | 过滤器的名字 }}
+        // 全局过滤器 在所有的组件中可以使用
+
+        // 局部过滤器（filters）
+        // var App = {
+        //     data(){
+        //         return {
+        //             price:0
+        //         }
+        //     },
+        //     template: `
+        //         <div>
+        //             <input type='text' v-model='price'>
+        //             <h3>{{price | myMoney}}</h3>
+        //         </div>
+        //     `,
+        //     //也是key，value的形式
+        //     // key是过滤器的名字 value是过滤的方法
+        //     filters:{
+        //         myMoney:function( value ){
+        //             return '￥' + value
+        //         }
+        //         }
+        //     };
+        // 全局过滤器（filter） 需要像全局组件一样定义
+        // 1.先声明过滤器
+        // 如果过滤器有参数，在定义过滤器的时候，就需要增加一个参数 arg,同时需要return
+        Vue.filter('myReverse', function(value,arg){
+            return arg + ' ' + value.split('').reverse().join('')
+        })
+
+        var App = {
+                data() {
+                    return {
+                        price: 0,
+                        msg:'hello filters'
+                    }
+                },
+                template: `
+                    <div>
+                        <input type='text' v-model='price'>
+                        <h3>{{price | myMoney}}</h3>
+                        // 2.全局过滤器可以在任意地方使用，需要在使用的地方调用（像全局组件）
+                        <h3>{{msg | myReverse('hahaha')}}</h3>
+                        
+                    </div>
+                    `,
+                //也是key，value的形式
+                // key是过滤器的名字 value是过滤的方法
+                filters: {
+                    myMoney: function (value) {
+                        return '￥' + value
+                    }
+                }
+            };
+
+            var vm = new Vue({
+                el: '#app',
+                components: {
+                    App
+                },
+                template: `
+                    <App/>
+                `
+            });
+    </script>
+</body>
+
+</html>

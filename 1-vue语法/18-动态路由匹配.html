@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>嵌套</title>
+</head>
+
+<body>
+    <div id="app">
+
+    </div>
+    <script type="text/javascript" src='./node_modules/vue/dist/vue.js'> </script>
+    <script type="text/javascript" src='./node_modules/vue-router/dist/vue-router.js'> </script>
+    <script>
+        // 当前组件的复用，然后通过监听，获取到当前组件的变化
+        var comDesc = {
+            data(){
+                return {
+                    msg:'hahha'
+                }
+            },
+            template:`
+                <div>
+                    我是{{msg}}
+                </div>
+            `,
+            created(){
+                console.log(1);
+                this.msg = '前端';
+            },
+            // watch是在当前组件的内部，监听路由信息的变化
+            // 使用 $route 这个是一个函数，有两个参数，一个to 一个 from
+            watch:{
+                '$route'(to,from){
+                    console.log(to);
+                    console.log(from);
+                    // 使用监听可以获取到对应的数据，这个时候可以修改数据，
+                    this.msg=to.params.id
+                }
+            }
+
+        };
+
+        var Timeline = {
+            // 单页应用是把内容渲染了，在修改地址，
+            // 所以可以使用同样的内容，然后绑定不同的链接地址
+            template:`
+                <div id='timeline'>
+                    <router-link :to="{name:'comDesc',params:{id:'frontend'}}">前端</router-link>
+                    <router-link :to="{name:'comDesc',params:{id:'backend'}}">后端</router-link>
+                    <router-view/>
+                </div>
+            `
+        }
+
+        var Pins = {
+            template:`
+                <div>
+                    我是沸点
+                </div>
+            `
+        }
+        var router = new VueRouter({
+            routes:[
+                {
+                    path:'/timeline', 
+                    component:Timeline,
+                    // 一个共同的组件，结构是一样的，但是数据是不同的
+                    children:[
+                        {
+                            name:'comDesc',
+                            // 动态路由匹配
+                            path:'/timeline/:id',
+                            component:comDesc
+                        }
+                    ]
+                },
+                {
+                    path: '/pins',
+                    component: Pins
+                }
+            ]
+        })
+
+        var App = {
+            template:`
+                <div>
+                <router-link to='/timeline'>首页</router-link>
+                <router-link to='/pins'>沸点</router-link>
+                <router-view/>
+                </div>
+            `
+        }
+        var vm = new Vue({
+            el:"#app",
+            router,
+            components:{
+                App
+            },
+            template:`
+                <App/>
+            `
+        })
+    </script>
+</body>
+
+</html>
