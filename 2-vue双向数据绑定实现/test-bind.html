@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,7 +12,7 @@
             padding: 0;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-        
+
         body {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
@@ -20,7 +21,7 @@
             align-items: center;
             padding: 20px;
         }
-        
+
         .container {
             max-width: 800px;
             width: 100%;
@@ -29,43 +30,43 @@
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
             overflow: hidden;
         }
-        
+
         .header {
             background: #4a6cf7;
             color: white;
             padding: 20px;
             text-align: center;
         }
-        
+
         .header h1 {
             font-size: 28px;
             margin-bottom: 10px;
         }
-        
+
         .header p {
             opacity: 0.9;
             font-size: 16px;
         }
-        
+
         .content {
             padding: 30px;
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 30px;
         }
-        
+
         @media (max-width: 768px) {
             .content {
                 grid-template-columns: 1fr;
             }
         }
-        
+
         .demo-section {
             background: #f8f9fa;
             border-radius: 8px;
             padding: 20px;
         }
-        
+
         .demo-section h2 {
             color: #4a6cf7;
             margin-bottom: 15px;
@@ -73,19 +74,20 @@
             border-bottom: 2px solid #eaeaea;
             padding-bottom: 10px;
         }
-        
+
         .input-group {
             margin-bottom: 15px;
         }
-        
+
         .input-group label {
             display: block;
             margin-bottom: 5px;
             font-weight: 600;
             color: #555;
         }
-        
-        .input-group input, .input-group textarea {
+
+        .input-group input,
+        .input-group textarea {
             width: 100%;
             padding: 10px;
             border: 1px solid #ddd;
@@ -93,12 +95,13 @@
             font-size: 16px;
             transition: border 0.3s;
         }
-        
-        .input-group input:focus, .input-group textarea:focus {
+
+        .input-group input:focus,
+        .input-group textarea:focus {
             border-color: #4a6cf7;
             outline: none;
         }
-        
+
         .display-area {
             background: white;
             border: 1px solid #eaeaea;
@@ -107,12 +110,12 @@
             min-height: 120px;
             margin-top: 10px;
         }
-        
+
         .display-area p {
             margin-bottom: 8px;
             line-height: 1.5;
         }
-        
+
         .explanation {
             grid-column: 1 / -1;
             background: #f0f7ff;
@@ -121,28 +124,28 @@
             border-radius: 4px;
             margin-top: 10px;
         }
-        
+
         .explanation h3 {
             color: #4a6cf7;
             margin-bottom: 10px;
         }
-        
+
         .explanation ul {
             padding-left: 20px;
         }
-        
+
         .explanation li {
             margin-bottom: 8px;
             line-height: 1.5;
         }
-        
+
         .highlight {
             background: #fff9c4;
             padding: 2px 4px;
             border-radius: 3px;
             font-weight: 600;
         }
-        
+
         .footer {
             text-align: center;
             padding: 15px;
@@ -152,6 +155,7 @@
         }
     </style>
 </head>
+
 <body>
     <div id="app">
 
@@ -175,8 +179,8 @@
                 </div>
 
                 <div class="display-area">
-                    <p><strong>消息内容:</strong>v-text 的值 <span v-text="message"></span></p>
-                    <p><strong>消息内容:</strong> \{\{\}\} 的值 {{message}}</p>
+                    <p><strong>消息内容:</strong>v-text 的值： <span v-text="message"></span></p>
+                    <p><strong>消息内容:</strong> message 大括号里的值 ：{{message}}</p>
                     <p><strong>计数器值:</strong> <span v-text="counter"></span></p>
                 </div>
 
@@ -189,12 +193,12 @@
                     <label for="name">姓名:</label>
                     <input type="text" id="name" v-model="user.name" placeholder="请输入姓名">
                 </div>
-                
+
                 <div class="input-group">
                     <label for="email">邮箱:</label>
                     <input type="email" id="email" v-model="user.email" placeholder="请输入邮箱">
                 </div>
-                
+
                 <div class="input-group">
                     <label>订阅通知:</label>
                     <div>
@@ -202,11 +206,13 @@
                         <label for="subscribe" style="display: inline; margin-left: 5px;">我同意接收更新通知</label>
                     </div>
                 </div>
-                
+
                 <div class="display-area">
                     <p><strong>用户信息:</strong></p>
                     <p>姓名: <span v-text="user.name"></span></p>
+                    <p>user.name: {{user.name}}</p>
                     <p>邮箱: <span v-text="user.email"></span></p>
+                    <p>user.email: {{user.email}}</p>
                     <p>订阅状态: <span v-text="user.subscribed ? '已订阅' : '未订阅'"></span></p>
                 </div>
             </div>
@@ -225,17 +231,58 @@
                 this._data = options.data;
                 // todo 计算属性
 
-                // 数据劫持
+                // 1，数据劫持
                 this.observe(this._data);
+
+                // 2，把 data 的数据 重新渲染页面dom
+                // this.compile(options.el, this);
+                this.compile(options.el);
+
+            }
+
+            compile(el) {
+                const element = document.querySelector(el);
+                const fragment = document.createDocumentFragment();
+                let child = null;
+                while (child = element.firstChild) {
+                    // 循环的时候把页面的子节点赋值给 child 变量
+                    // 然后再把 child 变量里面的元素 赋值为 fragment，直到所有节点都添加到文档碎片里面
+                    fragment.append(child);
+                }
+                this.fragmentCompile(fragment);
+                element.appendChild(fragment);
+            }
+            fragmentCompile(node) {
+                // 把修改的内容，重新渲染到页面
+                // 但是只是需要修改 dom 里面的文本节点，其他的节点可以不用处理
+                // 修改插值表达式 {{}} 的值
+                // 文本节点的节点类型是 3
+                const pattern = /\{\{\s*(\S+)\s*\}\}/;
+
+                if (node.nodeType === 3) {
+                    const nodeValue = node.nodeValue;
+                    const resultRegex = pattern.exec(nodeValue);
+                    if (resultRegex) {
+                        const arr = resultRegex[1].split('.');
+                        // todo 目前只能匹配一个 {{}}, 所以需要匹配多个的话，需要修改正则匹配的方式
+                        const value = arr.reduce((acc, key) => acc[key], this._data);
+                        node.nodeValue = nodeValue.replace(pattern, value);
+                        new Watcher(this, resultRegex[1], newVal => {
+                            // 这个回调函数现在不执行，要等待数据更新，再执行这个回调函数
+                            node.nodeValue = nodeValue.replace(pattern, newVal);
+                        })
+                    }
+                    return
+                }
+                // 递归处理子节点下的子节点
+                node.childNodes.forEach((child) => this.fragmentCompile(child))
             }
 
             observe(data) {
-                console.log('observe-----data', data)
-                // console.log('observe-----data---key', Object.keys(data))
                 // 遍历之前找到 递归的出口
                 if (!data || typeof data !== 'object') return;
+                const dependency = new Dependency();
                 Object.keys(data).forEach((key) => {
-                    console.log('observe-----data---key', key)
                     let val = data[key];
                     // 递归给对象做属性的数据劫持
                     this.observe(val);
@@ -243,41 +290,84 @@
                         enumerable: true,
                         configurable: true,
                         get: () => {
+                            console.log(`访问了属性${key}, 值为${val}`);
+                            Dependency.temp && dependency.addSub(Dependency.temp);
+                            if (Dependency.temp) {
+                                // 有订阅者的时候输出订阅者
+                                console.log('Dependency.temp---', Dependency.temp);
+                            }
                             // 要保存值，然后设置，否则值为 undefined
-                            console.log(`访问了 key: ${key}, 其值为 :${val}`);
                             return val;
                         },
                         set: (newVal) => {
-                            console.log(`设置了 key: ${key}, 其新值为 :${newVal}`);
                             val = newVal;
                             this.observe(newVal);
-
+                            dependency.notify();
                         },
                     })
-                    
+
                 })
             }
         }
 
+        // 收集和通知订阅者
+        class Dependency {
+            constructor() {
+                this.subscribed = [];
+            }
+            // 添加订阅者
+            addSub(sub) {
+                this.subscribed.push(sub);
+            }
+            // 通知订阅者更新
+            notify() {
+                // 让订阅者调用自身的 update 方法去更新自己
+                this.subscribed.forEach((sub) => sub.update());
+            }
+        }
+
+        // 订阅者类
+        class Watcher {
+            constructor(vm, key, cb) {
+                this.vm = vm; // Vue 实例
+                this.key = key; // 订阅的属性
+                this.cb = cb; // 记录如何更新文本内容
+                // 临时属性 - 把订阅者存储到Dependency类中
+                // 把订阅者实例赋值给 Dependency 中
+                Dependency.temp = this;
+                console.log(`用属性key= ${key} 创建订阅者`);
+                // 触发 get 时，添加订阅者到订阅者数组中
+                key.split('.').reduce((total, current) => total[current], vm._data);
+                Dependency.temp = null;
+            }
+
+            update() {
+                // 发布者通知订阅者可以更新了，订阅者就调用这个函数
+                const value = this.key.split('.').reduce((total, current) => total[current], this.vm._data);
+                this.cb(value);
+            }
+        }
+
         // 添加事件
-        document.addEventListener('DOMContentLoaded', () => {
-            console.log('DOMContentLoaded-----')
-            const app = new Vue({
-                el: '#app',
-                data: {
-                    message: 'Hello Vue!',
-                    counter: 1,
-                    user: {
-                        name: '张三',
-                        email: 'zhangsan@example.com',
-                        subscribed: true
-                    }
+        // document.addEventListener('DOMContentLoaded', () => {
+        const app = new Vue({
+            el: '#app',
+            data: {
+                message: 'Hello Vue!',
+                counter: 1,
+                user: {
+                    name: '张三',
+                    email: 'zhangsan@example.com',
+                    subscribed: true,
                 }
-            })
+            }
         })
+        console.log('app-----', app)
+        // })
 
 
     </script>
-    
+
 </body>
+
 </html>
